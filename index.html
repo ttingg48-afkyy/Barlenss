@@ -1,267 +1,62 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BarLens - Download APK</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <style>
-    body {
-      background: radial-gradient(circle at top, #000000, #0a0a0a, #000000);
-      color: #fff;
-      font-family: 'Poppins', sans-serif;
-      overflow-x: hidden;
-    }
-    .glitch {
-      position: relative;
-      font-weight: 900;
-      font-size: 3rem;
-      color: white;
-      animation: flicker 2s infinite;
-    }
-    @keyframes flicker {
-      0%, 18%, 22%, 25%, 53%, 57%, 100% {
-        text-shadow:
-          0 0 5px #fff,
-          0 0 10px #ff0000,
-          0 0 20px #ff0000,
-          0 0 40px #ff0000;
-      }
-      20%, 24%, 55% { text-shadow: none; }
-    }
-    .btn {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 24px;
-      border-radius: 12px;
-      background: linear-gradient(90deg, #ff0000, #6b0000);
-      font-weight: 600;
-      transition: 0.18s transform ease, 0.18s box-shadow ease;
-      cursor: pointer;
-      text-decoration: none;
-      color: white;
-      user-select: none;
-    }
-    .btn:hover { transform: scale(1.03); }
-
-    /* Lock / disabled look */
-    .btn.locked {
-      background: linear-gradient(90deg, rgba(80,0,0,0.9), rgba(30,0,0,0.9));
-      box-shadow: 0 0 18px rgba(255,0,0,0.06) inset;
-      cursor: not-allowed;
-      transform: none !important;
-      opacity: 0.95;
-    }
-
-    /* small lock icon bubble */
-    .lock-bubble {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,0.5);
-      border: 1px solid rgba(255,0,0,0.18);
-      box-shadow: 0 0 18px rgba(255,0,0,0.08);
-    }
-
-    /* shake animation when pressed */
-    @keyframes shake {
-      0% { transform: translateX(0); }
-      20% { transform: translateX(-8px); }
-      40% { transform: translateX(6px); }
-      60% { transform: translateX(-4px); }
-      80% { transform: translateX(2px); }
-      100% { transform: translateX(0); }
-    }
-
-    .shake {
-      animation: shake 420ms cubic-bezier(.36,.07,.19,.97);
-    }
-
-    /* lock pulse when first locked */
-    @keyframes lockPulse {
-      0% { box-shadow: 0 0 6px #ff0000aa; transform: scale(1); }
-      50% { box-shadow: 0 0 30px #ff0000; transform: scale(1.02); }
-      100% { box-shadow: 0 0 6px #ff0000aa; transform: scale(1); }
-    }
-    .lock-pulse {
-      animation: lockPulse 1800ms infinite;
-    }
-
-    .warning-box {
-      background: rgba(15, 0, 0, 0.94);
-      border: 2px solid #ff0000;
-      box-shadow: 0 0 30px #ff0000aa;
-      border-radius: 16px;
-      padding: 20px;
-      max-width: 420px;
-      text-align: center;
-      margin: 30px auto;
-    }
-
-    .warning-emoji {
-      font-size: 44px;
-      margin-bottom: 8px;
-      display: block;
-      text-shadow: 0 0 8px #ff7777;
-    }
-
-    .blocked-note {
-      margin-top: 8px;
-      font-size: 13px;
-      color: #f3b1b1;
-    }
-
-    /* small helper for hidden but accessible */
-    .sr-only { position: absolute; width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BarLens</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="flex flex-col items-center justify-center min-h-screen text-center">
+<body>
 
-  <div class="max-w-xl px-6 py-12">
-    <h1 class="glitch mb-4">BarLens</h1>
-    <p class="text-gray-300 mb-8">
-      BarLens adalah kamera modifikasi dari Transsion Holding  
-      dan dapat menggunakan efek Camon/Pova.
-    </p>
+    <!-- HEADER HITAM -->
+    <header class="header">
+        <div class="menu-btn" onclick="openMenu()">&#9776;</div>
 
-    <!-- Dark warning box (visible only when blocked) -->
-    <div id="warning" class="hidden warning-box" role="alert" aria-live="polite">
-      <div class="warning-emoji">⚠️</div>
-      <h2 class="text-red-400 text-xl font-bold mb-2">Akses Diblokir</h2>
-      <p class="text-gray-300 text-sm leading-relaxed">
-        Maaf, aplikasi ini <span class="text-red-500 font-semibold">tidak tersedia</span> di wilayah Anda.<br>
-        Sistem mendeteksi lokasi: <b id="detectedCountry"></b>
-      </p>
-      <div class="blocked-note">Thanks Singapura</div>
+        <!-- Gambar logo kamera -->
+        <img src="logo.png" class="logo">
+
+        <!-- Gambar tulisan BarLENS -->
+        <img src="barlens-text.png" class="title-img">
+    </header>
+
+    <!-- TAB -->
+    <div class="tabs">
+        <div class="tab" onclick="setTab('semua')">
+            <span id="dot-semua" class="dot">•</span> Semua
+        </div>
+        <div class="tab" onclick="setTab('camera')">
+            <span id="dot-camera" class="dot hidden">•</span> Camera
+        </div>
+        <div class="tab" onclick="setTab('game')">
+            <span id="dot-game" class="dot hidden">•</span> Game
+        </div>
     </div>
 
-    <!-- Download button (becomes 'locked' visually when blocked) -->
-    <a id="downloadBtn" href="https://www.mediafire.com/file/i1jmwtze6d0cpr5/base.apk"
-       target="_blank" rel="noopener noreferrer" class="btn" aria-describedby="downloadDesc">
-      <span class="lock-bubble" id="lockIcon" style="display:none;">
-        🔒
-      </span>
-      <span id="btnText">🔥 Download Sekarang</span>
-    </a>
-    <div id="downloadDesc" class="sr-only">Download</div>
+    <div class="line"></div>
 
-    <div class="mt-10 text-sm text-gray-500">
-      <p>Ukuran: 717MB | Rilis: 2025-10-27</p>
-      <p>Developer : <span style="color: #ff6666; text-shadow: 0 0 8px #ffaaaa;">Bara Setiawan</span></p>
+    <!-- KONTEN BERUBAH -->
+    <div id="content" class="content">
+        <p class="center">Kembali Lain Waktu</p>
     </div>
-  </div>
 
-  <script>
-    // Config: ganti ini jika mau
-    const APK_URL = "https://www.mediafire.com/file/i1jmwtze6d0cpr5/base.apk";
+    <!-- MENU OVERLAY -->
+<div id="menu" class="menu-overlay">
+    <div class="menu-left">
+        <div class="close" onclick="closeMenu()">✕</div>
 
-    const warningBox = document.getElementById('warning');
-    const downloadBtn = document.getElementById('downloadBtn');
-    const lockIcon = document.getElementById('lockIcon');
-    const btnText = document.getElementById('btnText');
-    const detectedCountryEl = document.getElementById('detectedCountry');
+        <p class="menu-info">Website Ini Belum Sepenuhnya 100%</p>
+        
+ <p class="dev">Developer BaraSetiawan</p>
 
-    // Utility: set locked visual state
-    function setLockedState(countryName) {
-      // persist
-      localStorage.setItem('barlens_blocked', 'true');
-      localStorage.setItem('barlens_blocked_country', countryName || 'unknown');
+    </div>
+    <div class="menu-right"></div>
+</div>
 
-      // show warning
-      detectedCountryEl.textContent = countryName || '—';
-      warningBox.classList.remove('hidden');
+        <!-- BAGIAN KANAN TRANSPARAN -->
+        <div class="menu-right"></div>
 
-      // show locked style on button but keep it visible
-      downloadBtn.classList.add('locked');
-      lockIcon.style.display = 'inline-flex';
-      lockIcon.classList.add('lock-pulse');
-      btnText.textContent = 'Terkunci — Tidak Bisa Diunduh';
-      // keep href but still prevent navigation (we'll prevent on click)
-      downloadBtn.setAttribute('aria-disabled', 'true');
-    }
+    </div>
 
-    // If already blocked in localStorage, apply immediately
-    if (localStorage.getItem('barlens_blocked') === 'true') {
-      const c = localStorage.getItem('barlens_blocked_country') || '—';
-      detectedCountryEl.textContent = c;
-      warningBox.classList.remove('hidden');
-      downloadBtn.classList.add('locked');
-      lockIcon.style.display = 'inline-flex';
-      lockIcon.classList.add('lock-pulse');
-      btnText.textContent = 'Terkunci — Tidak Bisa Diunduh';
-      downloadBtn.setAttribute('aria-disabled', 'true');
-    } else {
-      // Try to detect country by IP
-      fetch('https://ipapi.co/json')
-        .then(res => res.json())
-        .then(data => {
-          const countryName = data && (data.country_name || data.country) ? (data.country_name || data.country) : null;
-          // If visitor country is Singapore, lock
-          if (countryName && (countryName.toLowerCase() === 'singapore' || countryName.toLowerCase() === 'singapura')) {
-            setLockedState(countryName);
-          } else {
-            // ensure normal state: set proper download href (safe)
-            downloadBtn.setAttribute('href', APK_URL);
-            downloadBtn.setAttribute('target', '_blank');
-            downloadBtn.removeAttribute('aria-disabled');
-          }
-        })
-        .catch(err => {
-          // Jika gagal deteksi, biarkan tombol normal (tidak terkunci)
-          console.error('Gagal mendeteksi lokasi:', err);
-          downloadBtn.setAttribute('href', APK_URL);
-        });
-    }
-
-    // Intercept clicks: if locked, animate & vibrate & prevent default navigation
-    downloadBtn.addEventListener('click', function (e) {
-      const isLocked = downloadBtn.classList.contains('locked') || downloadBtn.getAttribute('aria-disabled') === 'true';
-      if (isLocked) {
-        e.preventDefault();
-        // small shake animation
-        downloadBtn.classList.remove('shake');
-        // reflow to restart animation
-        void downloadBtn.offsetWidth;
-        downloadBtn.classList.add('shake');
-
-        // vibrate if supported
-        if (navigator.vibrate) {
-          try { navigator.vibrate([150, 70, 150]); } catch (e) { /* ignore */ }
-        }
-
-        // flash warning box quickly
-        if (warningBox) {
-          warningBox.style.transform = 'scale(1.02)';
-          setTimeout(() => { warningBox.style.transform = ''; }, 260);
-        }
-
-        // optionally show quick temporary tooltip text change
-        const originalText = btnText.textContent;
-        btnText.textContent = 'Terkunci';
-        setTimeout(() => { btnText.textContent = originalText; }, 900);
-        return false;
-      } else {
-        // normal behaviour: go to APK url in new tab
-        return true;
-      }
-    }, { passive: false });
-
-    // Extra: prevent right-click save-then-open bypass on locked state
-    downloadBtn.addEventListener('auxclick', function (e) {
-      const isLocked = downloadBtn.classList.contains('locked');
-      if (isLocked) {
-        e.preventDefault();
-      }
-    });
-
-    // (Optional) If user tries to remove localStorage via JS console, difficult to prevent from client-side.
-    // Server-side enforcement is the only reliable permanent block; here we persist locally for UX.
-  </script>
-
+    <script src="script.js"></script>
 </body>
 </html>
